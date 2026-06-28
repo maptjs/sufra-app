@@ -1,0 +1,45 @@
+name: Build Sufra Android APK
+
+# Builds a real, installable release APK using GitHub's free build servers.
+# No Flutter, no Android Studio, nothing to install on your own computer.
+#
+# After this run finishes (Actions tab -> this workflow run -> "Summary"),
+# scroll to "Artifacts" and download "sufra-release-apk". Unzip it, copy the
+# .apk to your phone, and tap it to install (see README for the one-time
+# "allow installs from this source" step Android will ask for).
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+          channel: 'stable'
+
+      - name: Generate Android platform folder (matched to this Flutter version)
+        run: flutter create --org com.sufra --project-name sufra --platforms android .
+
+      - name: Add permissions + Arabic app name to the manifest
+        run: python3 tool/patch_manifest.py
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Generate launcher icons (logo -> all required sizes)
+        run: dart run flutter_launcher_icons
+
+      - name: Build release APK
+        run: flutter build apk --release
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: sufra-release-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
