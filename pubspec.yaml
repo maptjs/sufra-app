@@ -1,0 +1,60 @@
+name: sufra
+description: "سُفرة — ماسح غذاء الأسرة. Scan your family's food for nutrition, allergens, and safety, instantly, in Arabic."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.6
+
+  # Barcode / camera scanning
+  mobile_scanner: ^5.2.3
+
+  # Networking (Open Food Facts public API)
+  http: ^1.2.2
+
+  # Local persistence (family profiles, scan history) - pure Dart, no native build step
+  shared_preferences: ^2.3.2
+
+  # Sound effects (scan success / alert / shutter)
+  audioplayers: ^6.1.0
+
+  # Simple unique IDs for family member records
+  uuid: ^4.5.1
+
+  # Arabic + English localization
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.19.0
+
+  # Arabic-quality font (Cairo), fetched once and cached on-device — avoids
+  # bundling large font binaries in the repo while still looking native.
+  google_fonts: ^6.2.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+  # Generates Android/iOS launcher icons from a single source image
+  flutter_launcher_icons: ^0.14.1
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/sounds/
+    - assets/icon/
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/app_icon.png"
+  min_sdk_android: 21
+  adaptive_icon_background: "#F3CBAA"
+  adaptive_icon_foreground: "assets/icon/app_icon_foreground.png"
